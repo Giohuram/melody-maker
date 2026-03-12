@@ -63,6 +63,13 @@ const Navbar = () => {
                 <Radio className="w-3.5 h-3.5" />
                 Fil d'actualité
               </Link>
+              <Link
+                to="/docs/backend"
+                className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium flex items-center gap-1"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                Docs API
+              </Link>
             </>
           )}
         </div>
