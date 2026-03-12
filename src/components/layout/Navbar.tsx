@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Menu, X, Zap, Radio } from "lucide-react";
+import { Menu, X, Zap, Radio, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoImg from "@/assets/lyricwave-logo.png";
 

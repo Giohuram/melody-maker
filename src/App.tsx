@@ -31,6 +31,7 @@ const App = () => (
           <Route path="/terms" element={<TermsOfUse />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/docs/backend" element={<BackendDocs />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
