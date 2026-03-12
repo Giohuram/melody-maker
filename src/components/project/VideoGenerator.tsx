@@ -27,6 +27,9 @@ interface VideoStyle {
   karaoke: boolean;
 }
 
+// format → [width, height]
+
+
 interface VideoGeneratorProps {
   audioUrl: string;
   coverUrl: string;
