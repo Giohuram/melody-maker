@@ -7,7 +7,7 @@ const plans = [
   {
     name: "Gratuit",
     icon: Zap,
-    price: "0€",
+    price: "$0",
     period: "pour toujours",
     description: "Parfait pour commencer",
     color: "muted",
@@ -26,7 +26,7 @@ const plans = [
   {
     name: "Pro",
     icon: Crown,
-    price: "9,99€",
+    price: "$9.99",
     period: "/mois",
     description: "Pour les créateurs sérieux",
     color: "primary",
@@ -48,7 +48,7 @@ const plans = [
   {
     name: "Entreprise",
     icon: Building2,
-    price: "49,99€",
+    price: "$49.99",
     period: "/mois",
     description: "Pour labels & agences",
     color: "secondary",
