@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Menu, X, Zap, Radio } from "lucide-react";
+import { Menu, X, Zap, Radio, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoImg from "@/assets/lyricwave-logo.png";
 
@@ -62,6 +62,13 @@ const Navbar = () => {
               >
                 <Radio className="w-3.5 h-3.5" />
                 Fil d'actualité
+              </Link>
+              <Link
+                to="/docs/backend"
+                className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium flex items-center gap-1"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                Docs API
               </Link>
             </>
           )}
@@ -133,6 +140,10 @@ const Navbar = () => {
               <Link to="/feed" onClick={() => setMobileOpen(false)} className="text-muted-foreground hover:text-foreground text-sm font-medium py-2 flex items-center gap-2">
                 <Radio className="w-4 h-4" />
                 Fil d'actualité
+              </Link>
+              <Link to="/docs/backend" onClick={() => setMobileOpen(false)} className="text-muted-foreground hover:text-foreground text-sm font-medium py-2 flex items-center gap-2">
+                <BookOpen className="w-4 h-4" />
+                Docs API
               </Link>
             </>
           )}
