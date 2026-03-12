@@ -7,7 +7,7 @@ const plans = [
   {
     name: "Gratuit",
     icon: Zap,
-    price: "0€",
+    price: "$0",
     period: "pour toujours",
     description: "Parfait pour commencer",
     color: "muted",
