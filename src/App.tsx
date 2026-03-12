@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import TermsOfUse from "./pages/TermsOfUse";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Support from "./pages/Support";
+import BackendDocs from "./pages/BackendDocs";
 
 const queryClient = new QueryClient();
 
