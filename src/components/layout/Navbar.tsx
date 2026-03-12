@@ -141,6 +141,10 @@ const Navbar = () => {
                 <Radio className="w-4 h-4" />
                 Fil d'actualité
               </Link>
+              <Link to="/docs/backend" onClick={() => setMobileOpen(false)} className="text-muted-foreground hover:text-foreground text-sm font-medium py-2 flex items-center gap-2">
+                <BookOpen className="w-4 h-4" />
+                Docs API
+              </Link>
             </>
           )}
           {isLanding && (
