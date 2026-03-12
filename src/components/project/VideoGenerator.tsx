@@ -45,7 +45,8 @@ type GenerationState = "idle" | "generating" | "done" | "error";
 const formatDimensions: Record<string, [number, number]> = {
   tiktok: [540, 960],
   shorts: [540, 960],
-  youtube: [960, 540],
+  youtube: [540, 960],
+  "youtube-full": [960, 540],
   instagram: [540, 540],
 };
 
