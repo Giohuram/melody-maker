@@ -265,10 +265,10 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       <div>
-        <h2 className="font-heading text-xl font-bold mb-1">Generate & Export</h2>
-        <p className="text-sm text-muted-foreground">Render your lyrics video and download it.</p>
+        <h2 className="font-heading text-lg sm:text-xl font-bold mb-1">Générer & Exporter</h2>
+        <p className="text-sm text-muted-foreground">Rendu de votre vidéo lyrics et téléchargement.</p>
       </div>
 
       {/* Hidden canvas for rendering */}
