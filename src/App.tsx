@@ -9,6 +9,9 @@ import CreateProject from "./pages/CreateProject";
 import Auth from "./pages/Auth";
 import Feed from "./pages/Feed";
 import NotFound from "./pages/NotFound";
+import TermsOfUse from "./pages/TermsOfUse";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Support from "./pages/Support";
 
 const queryClient = new QueryClient();
 

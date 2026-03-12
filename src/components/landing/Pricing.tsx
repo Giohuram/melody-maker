@@ -48,7 +48,7 @@ const plans = [
   {
     name: "Entreprise",
     icon: Building2,
-    price: "49,99€",
+    price: "$49.99",
     period: "/mois",
     description: "Pour labels & agences",
     color: "secondary",
