@@ -5,76 +5,76 @@ const steps = [
   {
     icon: Upload,
     step: "01",
-    title: "Upload Your Track",
-    description: "Drop your MP3, WAV, or M4A file. We'll analyze the audio and display a beautiful waveform preview.",
+    title: "Uploadez votre morceau",
+    description: "Déposez votre fichier MP3, WAV ou M4A. On analyse l'audio et affiche un aperçu waveform.",
     color: "primary",
   },
   {
     icon: FileText,
     step: "02",
-    title: "Add Your Lyrics",
-    description: "Type or paste your lyrics. Import from .txt or .lrc files. Smart line detection handles the rest.",
+    title: "Ajoutez vos paroles",
+    description: "Tapez ou collez vos lyrics. Importez depuis .txt ou .lrc. La détection intelligente s'occupe du reste.",
     color: "secondary",
   },
   {
     icon: Zap,
     step: "03",
-    title: "Auto-Sync Magic",
-    description: "Our AI analyzes silence patterns and intelligently maps your lyrics to the perfect moments.",
+    title: "Sync Automatique",
+    description: "Notre IA analyse les silences et mappe intelligemment vos paroles aux moments parfaits.",
     color: "accent",
   },
   {
     icon: Sliders,
     step: "04",
-    title: "Fine-Tune Manually",
-    description: "Use the visual timeline to drag & drop sync points. Listen & mark mode for precision control.",
+    title: "Ajustement Manuel",
+    description: "Utilisez la timeline visuelle pour glisser-déposer les points de sync. Mode Listen & Mark pour la précision.",
     color: "primary",
   },
   {
     icon: Eye,
     step: "05",
-    title: "Preview & Customize",
-    description: "Pick templates, fonts, colors, and animations. Real-time preview exactly as it'll look.",
+    title: "Aperçu & Personnalisation",
+    description: "Choisissez templates, polices, couleurs et animations. Aperçu en temps réel exactement comme le résultat final.",
     color: "secondary",
   },
   {
     icon: Download,
     step: "06",
-    title: "Export & Share",
-    description: "Generate your video for TikTok, YouTube, Instagram, or Shorts. Ready to go viral.",
+    title: "Exporter & Partager",
+    description: "Générez votre vidéo pour TikTok, YouTube, Instagram ou Shorts. Partagez sur le fil d'actualité.",
     color: "accent",
   },
 ];
 
 const features = [
   {
-    title: "Smart Auto-Sync",
-    description: "Advanced silence detection algorithm maps your lyrics to the music automatically with high accuracy.",
+    title: "Sync Auto Intelligente",
+    description: "Algorithme avancé de détection des silences qui mappe vos paroles à la musique automatiquement.",
     icon: "🎯",
   },
   {
-    title: "Manual Timeline",
-    description: "Drag & drop timeline with Listen & Mark mode for frame-perfect lyric synchronization.",
+    title: "Timeline Manuelle",
+    description: "Timeline drag & drop avec mode Listen & Mark pour une synchronisation précise au frame près.",
     icon: "🎚️",
   },
   {
-    title: "Multiple Formats",
-    description: "Export for TikTok (9:16), YouTube (16:9), Instagram (1:1), and YouTube Shorts — all from one project.",
+    title: "5 Formats d'Export",
+    description: "Export pour TikTok (9:16), YouTube (16:9), YouTube Shorts, Instagram (1:1) — depuis un seul projet.",
     icon: "📱",
   },
   {
-    title: "Karaoke Mode",
-    description: "Word-by-word highlighting creates the ultimate karaoke effect your audience loves.",
+    title: "Mode Karaoké",
+    description: "Surbrillance mot par mot qui crée l'effet karaoké ultime que votre audience adore.",
     icon: "🎤",
   },
   {
-    title: "Premium Templates",
-    description: "Curated templates for Hip-Hop, Pop, R&B, Afrobeat, Rock, and more genres.",
-    icon: "🎨",
+    title: "Fil d'Actualité",
+    description: "Partagez vos vidéos et découvrez celles des autres artistes comme sur TikTok ou Suno AI.",
+    icon: "📡",
   },
   {
-    title: "Client-Side Generation",
-    description: "Your video is generated directly in your browser — no server queues, instant results.",
+    title: "Génération Côté Client",
+    description: "Votre vidéo est générée directement dans votre navigateur — aucune file d'attente serveur.",
     icon: "⚡",
   },
 ];
@@ -89,29 +89,29 @@ const Features = () => {
   return (
     <>
       {/* How It Works */}
-      <section id="how-it-works" className="py-24 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none" />
-        <div className="container mx-auto px-6">
+      <section id="how-it-works" className="py-16 sm:py-24 relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-secondary/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
           >
-            <span className="text-primary text-sm font-semibold uppercase tracking-widest">How It Works</span>
-            <h2 className="font-heading text-4xl md:text-5xl font-black mt-2 mb-4">
-              From Track to{" "}
-              <span className="gradient-text">Viral Video</span>
+            <span className="text-primary text-xs sm:text-sm font-semibold uppercase tracking-widest">Comment ça marche</span>
+            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black mt-2 mb-4">
+              Du Morceau à la{" "}
+              <span className="gradient-text">Vidéo Virale</span>
               <br />
-              in 6 Simple Steps
+              en 6 Étapes Simples
             </h2>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              The most streamlined lyrics video creation workflow ever built.
+            <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto px-2">
+              Le workflow de création de vidéos lyrics le plus fluide jamais conçu.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {steps.map((step, index) => {
               const Icon = step.icon;
               const colors = colorMap[step.color as keyof typeof colorMap];
@@ -122,15 +122,15 @@ const Features = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="glass rounded-2xl p-6 border border-border/40 hover:border-primary/30 transition-all duration-300 group relative overflow-hidden"
+                  className="glass rounded-2xl p-5 sm:p-6 border border-border/40 hover:border-primary/30 transition-all duration-300 group relative overflow-hidden"
                 >
-                  <div className="absolute top-4 right-4 font-mono text-4xl font-black text-muted/30 select-none">
+                  <div className="absolute top-4 right-4 font-mono text-3xl sm:text-4xl font-black text-muted/30 select-none">
                     {step.step}
                   </div>
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colors} border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon className={`w-6 h-6`} />
+                  <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${colors} border flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <h3 className="font-heading text-lg font-bold mb-2">{step.title}</h3>
+                  <h3 className="font-heading text-base sm:text-lg font-bold mb-2">{step.title}</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
                 </motion.div>
               );
@@ -140,23 +140,23 @@ const Features = () => {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-24 relative">
-        <div className="container mx-auto px-6">
+      <section id="features" className="py-16 sm:py-24 relative">
+        <div className="container mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
           >
-            <span className="text-secondary text-sm font-semibold uppercase tracking-widest">Features</span>
-            <h2 className="font-heading text-4xl md:text-5xl font-black mt-2 mb-4">
-              Everything You Need to{" "}
-              <span className="gradient-text-accent">Go Viral</span>
+            <span className="text-secondary text-xs sm:text-sm font-semibold uppercase tracking-widest">Fonctionnalités</span>
+            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black mt-2 mb-4">
+              Tout ce qu'il faut pour{" "}
+              <span className="gradient-text-accent">Devenir Viral</span>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {features.map((feat, index) => (
               <motion.div
                 key={feat.title}
@@ -164,12 +164,12 @@ const Features = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="glass rounded-2xl p-6 border border-border/40 hover:border-secondary/30 transition-all duration-300 group"
+                className="glass rounded-2xl p-5 sm:p-6 border border-border/40 hover:border-secondary/30 transition-all duration-300 group"
               >
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform inline-block">
+                <div className="text-3xl sm:text-4xl mb-3 sm:mb-4 group-hover:scale-110 transition-transform inline-block">
                   {feat.icon}
                 </div>
-                <h3 className="font-heading text-lg font-bold mb-2">{feat.title}</h3>
+                <h3 className="font-heading text-base sm:text-lg font-bold mb-2">{feat.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{feat.description}</p>
               </motion.div>
             ))}
