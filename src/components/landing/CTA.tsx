@@ -65,9 +65,9 @@ const CTA = () => {
               <span className="font-heading font-bold text-xl gradient-text">LyricWave</span>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">Confidentialité</a>
-              <a href="#" className="hover:text-foreground transition-colors">Conditions</a>
-              <a href="#" className="hover:text-foreground transition-colors">Support</a>
+              <Link to="/privacy" className="hover:text-foreground transition-colors">Confidentialité</Link>
+              <Link to="/terms" className="hover:text-foreground transition-colors">Conditions</Link>
+              <Link to="/support" className="hover:text-foreground transition-colors">Support</Link>
               <Link to="/feed" className="hover:text-foreground transition-colors flex items-center gap-1">
                 <Radio className="w-3.5 h-3.5" />
                 Fil d'actualité

@@ -27,6 +27,9 @@ const App = () => (
           <Route path="/feed" element={<Feed />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create" element={<CreateProject />} />
+          <Route path="/terms" element={<TermsOfUse />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/support" element={<Support />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
