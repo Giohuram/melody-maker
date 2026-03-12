@@ -275,28 +275,28 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
       <canvas ref={canvasRef} className="hidden" />
 
       {/* Status card */}
-      <div className="glass rounded-2xl p-8 border border-border/40 text-center">
+      <div className="glass rounded-2xl p-6 sm:p-8 border border-border/40 text-center">
         {state === "idle" && (
           <div className="space-y-4">
             <div className="w-16 h-16 rounded-2xl bg-gradient-primary mx-auto flex items-center justify-center animate-float">
-              <Film className="w-8 h-8" style={{ color: "hsl(var(--primary-foreground))" }} />
+              <Film className="w-8 h-8 text-primary-foreground" />
             </div>
             <div>
-              <h3 className="font-heading text-lg font-bold mb-1">Ready to Render</h3>
+              <h3 className="font-heading text-lg font-bold mb-1">Prêt à Générer</h3>
               <p className="text-sm text-muted-foreground">
-                {timings.length} lyrics lines · {Math.round(audioDuration)}s · {style.format.toUpperCase()}
+                {timings.length} lignes de paroles · {Math.round(audioDuration)}s · {style.format.toUpperCase()}
               </p>
             </div>
             <Button
               onClick={generate}
               disabled={!audioUrl || timings.length === 0}
-              className="bg-gradient-primary text-primary-foreground border-0 glow-primary hover:opacity-90 font-semibold gap-2 px-8 py-6 text-base rounded-xl"
+              className="bg-gradient-primary text-primary-foreground border-0 glow-primary hover:opacity-90 font-semibold gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base rounded-xl"
             >
               <Zap className="w-5 h-5" />
-              Generate Video
+              Générer la Vidéo
             </Button>
             {(!audioUrl || timings.length === 0) && (
-              <p className="text-xs text-muted-foreground">Add audio and sync lyrics first</p>
+              <p className="text-xs text-muted-foreground">Ajoutez l'audio et synchronisez les paroles d'abord</p>
             )}
           </div>
         )}
@@ -304,11 +304,11 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
         {state === "generating" && (
           <div className="space-y-4">
             <div className="w-16 h-16 rounded-2xl bg-gradient-primary mx-auto flex items-center justify-center animate-pulse">
-              <Loader2 className="w-8 h-8 animate-spin" style={{ color: "hsl(var(--primary-foreground))" }} />
+              <Loader2 className="w-8 h-8 animate-spin text-primary-foreground" />
             </div>
             <div>
-              <h3 className="font-heading text-lg font-bold mb-1">Rendering...</h3>
-              <p className="text-sm text-muted-foreground">Generating your lyrics video frame by frame</p>
+              <h3 className="font-heading text-lg font-bold mb-1">Génération en cours...</h3>
+              <p className="text-sm text-muted-foreground">Rendu de votre vidéo lyrics image par image</p>
             </div>
             <div className="w-full bg-muted/50 rounded-full h-3 overflow-hidden">
               <motion.div
@@ -328,23 +328,23 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
               <CheckCircle2 className="w-8 h-8 text-green-400" />
             </div>
             <div>
-              <h3 className="font-heading text-lg font-bold mb-1 text-green-400">Video Ready!</h3>
-              <p className="text-sm text-muted-foreground">Your lyrics video has been generated successfully.</p>
+              <h3 className="font-heading text-lg font-bold mb-1 text-green-400">Vidéo Prête !</h3>
+              <p className="text-sm text-muted-foreground">Votre vidéo lyrics a été générée avec succès.</p>
             </div>
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button
                 onClick={download}
-                className="bg-gradient-primary text-primary-foreground border-0 glow-primary hover:opacity-90 font-semibold gap-2 px-8 py-6 text-base rounded-xl"
+                className="bg-gradient-primary text-primary-foreground border-0 glow-primary hover:opacity-90 font-semibold gap-2 px-6 sm:px-8 py-5 sm:py-6 text-base rounded-xl"
               >
                 <Download className="w-5 h-5" />
-                Download Video
+                Télécharger la Vidéo
               </Button>
               <Button
                 variant="outline"
                 onClick={() => setState("idle")}
-                className="border-border/60 gap-2 py-6 rounded-xl"
+                className="border-border/60 gap-2 py-5 sm:py-6 rounded-xl"
               >
-                Re-generate
+                Re-générer
               </Button>
             </div>
           </div>
@@ -356,15 +356,15 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
               <AlertCircle className="w-8 h-8 text-destructive" />
             </div>
             <div>
-              <h3 className="font-heading text-lg font-bold mb-1 text-destructive">Generation Failed</h3>
-              <p className="text-sm text-muted-foreground">Something went wrong. Please try again.</p>
+              <h3 className="font-heading text-lg font-bold mb-1 text-destructive">Génération Échouée</h3>
+              <p className="text-sm text-muted-foreground">Une erreur s'est produite. Veuillez réessayer.</p>
             </div>
             <Button
               onClick={() => setState("idle")}
               variant="outline"
               className="border-border/60 gap-2"
             >
-              Try Again
+              Réessayer
             </Button>
           </div>
         )}
@@ -372,19 +372,19 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
 
       {/* Info */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="glass rounded-xl p-4 border border-border/40">
+        <div className="glass rounded-xl p-3 sm:p-4 border border-border/40">
           <p className="text-xs text-muted-foreground mb-1">Format</p>
           <p className="font-semibold text-sm uppercase">{style.format}</p>
         </div>
-        <div className="glass rounded-xl p-4 border border-border/40">
-          <p className="text-xs text-muted-foreground mb-1">Lyrics Lines</p>
-          <p className="font-semibold text-sm">{timings.length} synced</p>
+        <div className="glass rounded-xl p-3 sm:p-4 border border-border/40">
+          <p className="text-xs text-muted-foreground mb-1">Lignes de Paroles</p>
+          <p className="font-semibold text-sm">{timings.length} sync.</p>
         </div>
-        <div className="glass rounded-xl p-4 border border-border/40">
-          <p className="text-xs text-muted-foreground mb-1">Duration</p>
+        <div className="glass rounded-xl p-3 sm:p-4 border border-border/40">
+          <p className="text-xs text-muted-foreground mb-1">Durée</p>
           <p className="font-semibold text-sm font-mono">{Math.round(audioDuration)}s</p>
         </div>
-        <div className="glass rounded-xl p-4 border border-border/40">
+        <div className="glass rounded-xl p-3 sm:p-4 border border-border/40">
           <p className="text-xs text-muted-foreground mb-1">Template</p>
           <p className="font-semibold text-sm capitalize">{style.template}</p>
         </div>
