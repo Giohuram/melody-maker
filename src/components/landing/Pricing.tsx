@@ -26,7 +26,7 @@ const plans = [
   {
     name: "Pro",
     icon: Crown,
-    price: "9,99€",
+    price: "$9.99",
     period: "/mois",
     description: "Pour les créateurs sérieux",
     color: "primary",
