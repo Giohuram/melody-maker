@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import CreateProject from "./pages/CreateProject";
+import Auth from "./pages/Auth";
+import Feed from "./pages/Feed";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,6 +20,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/feed" element={<Feed />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create" element={<CreateProject />} />
           <Route path="*" element={<NotFound />} />

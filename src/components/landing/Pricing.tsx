@@ -5,64 +5,64 @@ import { Button } from "@/components/ui/button";
 
 const plans = [
   {
-    name: "Free",
+    name: "Gratuit",
     icon: Zap,
-    price: "$0",
-    period: "forever",
-    description: "Perfect to get started",
+    price: "0€",
+    period: "pour toujours",
+    description: "Parfait pour commencer",
     color: "muted",
-    cta: "Start Free",
+    cta: "Commencer Gratuitement",
     ctaVariant: "outline" as const,
     features: [
-      "3 videos per month",
+      "3 vidéos par mois",
       "TikTok & YouTube Shorts",
-      "Basic templates",
-      "Auto-sync",
-      "LyricWave watermark",
-      "720p export",
+      "Templates basiques",
+      "Sync automatique",
+      "Filigrane LyricWave",
+      "Export 720p",
     ],
-    notIncluded: ["All formats", "Premium templates", "No watermark"],
+    notIncluded: ["Tous les formats", "Templates premium", "Sans filigrane"],
   },
   {
     name: "Pro",
     icon: Crown,
-    price: "$9.99",
-    period: "/month",
-    description: "For serious creators",
+    price: "9,99€",
+    period: "/mois",
+    description: "Pour les créateurs sérieux",
     color: "primary",
     popular: true,
-    cta: "Get Pro",
+    cta: "Passer Pro",
     ctaVariant: "default" as const,
     features: [
-      "50 videos per month",
-      "All 4 export formats",
-      "Premium templates",
-      "Auto & manual sync",
-      "No watermark",
-      "1080p export",
-      "Karaoke word-highlight",
-      "Priority support",
+      "50 vidéos par mois",
+      "5 formats d'export",
+      "Templates premium",
+      "Sync auto & manuelle",
+      "Sans filigrane",
+      "Export 1080p",
+      "Mode karaoké mot-par-mot",
+      "Support prioritaire",
     ],
     notIncluded: [],
   },
   {
-    name: "Enterprise",
+    name: "Entreprise",
     icon: Building2,
-    price: "$49.99",
-    period: "/month",
-    description: "For labels & agencies",
+    price: "49,99€",
+    period: "/mois",
+    description: "Pour labels & agences",
     color: "secondary",
-    cta: "Contact Us",
+    cta: "Nous Contacter",
     ctaVariant: "outline" as const,
     features: [
-      "Unlimited videos",
-      "All formats & quality",
-      "Custom templates",
-      "Custom branding",
-      "API access",
-      "Bulk generation",
-      "Team collaboration",
-      "Dedicated support",
+      "Vidéos illimitées",
+      "Tous les formats & qualités",
+      "Templates personnalisés",
+      "Branding personnalisé",
+      "Accès API",
+      "Génération en masse",
+      "Collaboration en équipe",
+      "Support dédié",
     ],
     notIncluded: [],
   },
@@ -70,28 +70,27 @@ const plans = [
 
 const Pricing = () => {
   return (
-    <section id="pricing" className="py-24 relative overflow-hidden">
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="container mx-auto px-6">
+    <section id="pricing" className="py-16 sm:py-24 relative overflow-hidden">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] sm:w-[800px] h-[300px] sm:h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="container mx-auto px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <span className="text-accent text-sm font-semibold uppercase tracking-widest">Pricing</span>
-          <h2 className="font-heading text-4xl md:text-5xl font-black mt-2 mb-4">
-            Simple,{" "}
-            <span className="gradient-text">Transparent</span>{" "}
-            Pricing
+          <span className="text-accent text-xs sm:text-sm font-semibold uppercase tracking-widest">Tarifs</span>
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black mt-2 mb-4">
+            Tarification{" "}
+            <span className="gradient-text">Simple & Transparente</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            Start for free. Upgrade when you're ready to scale your music content.
+          <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto px-2">
+            Commencez gratuitement. Upgradez quand vous êtes prêt à scaler votre contenu musical.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
           {plans.map((plan, index) => {
             const Icon = plan.icon;
             return (
@@ -101,16 +100,16 @@ const Pricing = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`relative glass rounded-2xl p-8 border flex flex-col ${
+                className={`relative glass rounded-2xl p-6 sm:p-8 border flex flex-col ${
                   plan.popular
-                    ? "border-primary/60 glow-primary scale-105"
+                    ? "border-primary/60 glow-primary md:scale-105"
                     : "border-border/40"
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="bg-gradient-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full">
-                      MOST POPULAR
+                    <span className="bg-gradient-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap">
+                      LE PLUS POPULAIRE
                     </span>
                   </div>
                 )}
@@ -130,7 +129,7 @@ const Pricing = () => {
                 </div>
 
                 <div className="mb-6">
-                  <span className="font-heading text-4xl font-black">{plan.price}</span>
+                  <span className="font-heading text-3xl sm:text-4xl font-black">{plan.price}</span>
                   <span className="text-muted-foreground text-sm ml-1">{plan.period}</span>
                 </div>
 

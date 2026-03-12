@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Zap, Play, ArrowRight, Music2 } from "lucide-react";
+import { Zap, Play, ArrowRight, Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
@@ -25,20 +25,20 @@ const Hero = () => {
       <div className="absolute inset-0 bg-background/75" />
 
       {/* Ambient glows */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-secondary/20 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 container mx-auto px-6 text-center">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8 border border-primary/30"
+          className="inline-flex items-center gap-2 glass px-3 sm:px-4 py-2 rounded-full mb-6 sm:mb-8 border border-primary/30"
         >
           <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-          <span className="text-sm text-muted-foreground font-medium">
-            ✨ Create professional lyrics videos in minutes
+          <span className="text-xs sm:text-sm text-muted-foreground font-medium">
+            ✨ Créez des vidéos lyrics professionnelles en minutes
           </span>
         </motion.div>
 
@@ -47,13 +47,13 @@ const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-heading text-5xl md:text-7xl lg:text-8xl font-black leading-[1.05] mb-6"
+          className="font-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-[1.05] mb-5 sm:mb-6"
         >
-          Transform Your{" "}
+          Transformez Votre{" "}
           <br />
-          <span className="gradient-text">Music Into</span>
+          <span className="gradient-text">Musique en</span>
           <br />
-          Viral Videos
+          Vidéos Virales
         </motion.h1>
 
         {/* Sub */}
@@ -61,10 +61,10 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2"
         >
-          Upload your track, add lyrics, sync automatically or manually, and export
-          stunning lyrics videos for TikTok, YouTube, Instagram & more — in seconds.
+          Uploadez votre morceau, ajoutez des paroles, synchronisez automatiquement ou manuellement,
+          et exportez des vidéos lyrics pour TikTok, YouTube, Instagram et plus — en quelques secondes.
         </motion.p>
 
         {/* Wave animation */}
@@ -72,9 +72,9 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex items-end justify-center gap-0.5 h-10 mb-10"
+          className="flex items-end justify-center gap-0.5 h-8 sm:h-10 mb-8 sm:mb-10"
         >
-          {Array.from({ length: 40 }, (_, i) => (
+          {Array.from({ length: 30 }, (_, i) => (
             <WaveBar key={i} delay={i * 0.05} />
           ))}
         </motion.div>
@@ -84,28 +84,41 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16"
         >
           <Link to="/create">
             <Button
               size="lg"
-              className="bg-gradient-primary text-primary-foreground border-0 animate-pulse-glow hover:opacity-90 transition-all font-semibold text-base px-8 py-6 gap-2 rounded-xl"
+              className="w-full sm:w-auto bg-gradient-primary text-primary-foreground border-0 animate-pulse-glow hover:opacity-90 transition-all font-semibold text-base px-6 sm:px-8 py-5 sm:py-6 gap-2 rounded-xl"
             >
               <Zap className="w-5 h-5" />
-              Create Your Video Free
+              Créer ma Vidéo Gratuitement
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
-          <a href="#how-it-works">
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-border/60 text-foreground hover:bg-muted/50 font-semibold text-base px-8 py-6 gap-2 rounded-xl"
-            >
-              <Play className="w-5 h-5 fill-current" />
-              See How It Works
-            </Button>
-          </a>
+          <div className="flex gap-3 w-full sm:w-auto">
+            <a href="#how-it-works" className="flex-1 sm:flex-none">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-border/60 text-foreground hover:bg-muted/50 font-semibold text-base px-6 sm:px-8 py-5 sm:py-6 gap-2 rounded-xl"
+              >
+                <Play className="w-5 h-5 fill-current" />
+                Voir comment
+              </Button>
+            </a>
+            <Link to="/feed" className="flex-1 sm:flex-none">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-primary/40 text-primary hover:bg-primary/10 font-semibold text-base px-4 sm:px-6 py-5 sm:py-6 gap-2 rounded-xl"
+              >
+                <Radio className="w-5 h-5" />
+                <span className="hidden sm:inline">Fil d'actualité</span>
+                <span className="sm:hidden">Fil</span>
+              </Button>
+            </Link>
+          </div>
         </motion.div>
 
         {/* Stats */}
@@ -113,17 +126,17 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="flex flex-wrap items-center justify-center gap-8 md:gap-16"
+          className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-16"
         >
           {[
-            { value: "50K+", label: "Videos Created" },
-            { value: "12K+", label: "Artists" },
-            { value: "4", label: "Export Formats" },
-            { value: "Free", label: "To Start" },
+            { value: "50K+", label: "Vidéos Créées" },
+            { value: "12K+", label: "Artistes" },
+            { value: "5", label: "Formats d'Export" },
+            { value: "Gratuit", label: "Pour Commencer" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <div className="font-heading text-3xl font-black gradient-text">{stat.value}</div>
-              <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+              <div className="font-heading text-2xl sm:text-3xl font-black gradient-text">{stat.value}</div>
+              <div className="text-xs sm:text-sm text-muted-foreground mt-1">{stat.label}</div>
             </div>
           ))}
         </motion.div>
@@ -134,9 +147,9 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-xs text-muted-foreground">Scroll to explore</span>
+        <span className="text-xs text-muted-foreground">Défiler pour explorer</span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
