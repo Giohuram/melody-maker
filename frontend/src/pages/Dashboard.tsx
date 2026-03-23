@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Plus, Search, Grid3X3, List, Music2, Clock, CheckCircle2,
   AlertCircle, Loader2, MoreVertical, Play, Trash2, Copy,
-  Download, TrendingUp, Zap, Film, Radio,
+  Download, TrendingUp, Zap, Film,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,8 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Navbar from "@/components/layout/Navbar";
+import { api } from "@/lib/api";
+import { useAuth } from "@/contexts/AuthContext";
 
 type ProjectStatus = "draft" | "processing" | "completed" | "failed";
 type VideoFormat = "tiktok" | "youtube" | "youtube-full" | "instagram" | "shorts";
@@ -25,15 +27,6 @@ interface Project {
   createdAt: string;
   duration: string;
 }
-
-const mockProjects: Project[] = [
-  { id: "1", title: "Summer Vibes", artist: "DJ Nova", status: "completed", format: "tiktok", createdAt: "2025-03-10", duration: "3:42" },
-  { id: "2", title: "Midnight Drive", artist: "Luna Beats", status: "processing", format: "youtube-full", createdAt: "2025-03-09", duration: "4:15" },
-  { id: "3", title: "Neon Lights", artist: "CityWave", status: "draft", format: "instagram", createdAt: "2025-03-08", duration: "2:58" },
-  { id: "4", title: "Lost in Tokyo", artist: "Yume", status: "completed", format: "shorts", createdAt: "2025-03-07", duration: "0:45" },
-  { id: "5", title: "Afrobeats Vol.3", artist: "Afro Kings", status: "failed", format: "tiktok", createdAt: "2025-03-06", duration: "3:20" },
-  { id: "6", title: "Electric Dreams", artist: "Synthwave J", status: "completed", format: "youtube", createdAt: "2025-03-05", duration: "5:10" },
-];
 
 const statusConfig: Record<ProjectStatus, { label: string; icon: typeof CheckCircle2; color: string }> = {
   draft: { label: "Brouillon", icon: Clock, color: "text-muted-foreground bg-muted" },
@@ -50,13 +43,6 @@ const formatConfig: Record<VideoFormat, { label: string; ratio: string }> = {
   shorts: { label: "Shorts", ratio: "9:16" },
 };
 
-const stats = [
-  { label: "Total Projets", value: "6", icon: Film, color: "text-primary" },
-  { label: "Vidéos Créées", value: "3", icon: CheckCircle2, color: "text-green-400" },
-  { label: "Crédits Restants", value: "2", icon: Zap, color: "text-accent" },
-  { label: "Ce Mois-ci", value: "4", icon: TrendingUp, color: "text-secondary" },
-];
-
 const filterLabels: Record<string, string> = {
   all: "Tous", draft: "Brouillon", processing: "En cours", completed: "Terminé", failed: "Échoué",
 };
@@ -65,8 +51,42 @@ const Dashboard = () => {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | ProjectStatus>("all");
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
-  const filtered = mockProjects.filter((p) => {
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const data = await api.projects.getAll();
+        const mapped = data.map((p: any) => ({
+          id: String(p.id),
+          title: p.title || "Sans titre",
+          artist: p.artist || "Artiste inconnu",
+          status: (p.status || "draft") as ProjectStatus,
+          format: (p.format || "tiktok") as VideoFormat,
+          createdAt: p.created_at || new Date().toISOString(),
+          duration: p.duration || "0:00",
+        }));
+        setProjects(mapped);
+      } catch (err) {
+        console.error("Error fetching projects:", err);
+        setProjects([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  const stats = [
+    { label: "Total Projets", value: String(projects.length), icon: Film, color: "text-primary" },
+    { label: "Vidéos Créées", value: String(projects.filter(p => p.status === "completed").length), icon: CheckCircle2, color: "text-green-400" },
+    { label: "En cours", value: String(projects.filter(p => p.status === "processing").length), icon: Zap, color: "text-accent" },
+    { label: "Brouillons", value: String(projects.filter(p => p.status === "draft").length), icon: TrendingUp, color: "text-secondary" },
+  ];
+
+  const filtered = projects.filter((p) => {
     const matchSearch = p.title.toLowerCase().includes(search.toLowerCase()) || p.artist.toLowerCase().includes(search.toLowerCase());
     const matchFilter = filter === "all" || p.status === filter;
     return matchSearch && matchFilter;
@@ -88,13 +108,6 @@ const Dashboard = () => {
               <p className="text-muted-foreground mt-1 text-sm sm:text-base">Créez et gérez vos vidéos lyrics</p>
             </div>
             <div className="flex gap-3 w-full sm:w-auto">
-              <Link to="/feed" className="flex-1 sm:flex-none">
-                <Button variant="outline" className="w-full border-border/60 gap-2 text-sm">
-                  <Radio className="w-4 h-4" />
-                  <span className="hidden sm:inline">Fil d'actualité</span>
-                  <span className="sm:hidden">Fil</span>
-                </Button>
-              </Link>
               <Link to="/create" className="flex-1 sm:flex-none">
                 <Button className="w-full bg-gradient-primary text-primary-foreground border-0 glow-primary hover:opacity-90 font-semibold gap-2 text-sm">
                   <Plus className="w-4 h-4" />

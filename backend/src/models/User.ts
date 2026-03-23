@@ -5,6 +5,7 @@ export interface User {
   name: string;
   email: string;
   passwordHash: string;
+  googleId?: string;
   avatar: string;
   verified: boolean;
   createdAt: string;
@@ -15,6 +16,7 @@ interface UserRow {
   name: string;
   email: string;
   password_hash: string;
+  google_id: string;
   avatar: string;
   verified: number;
   created_at: string;
@@ -25,6 +27,7 @@ const rowToUser = (row: UserRow): User => ({
   name: row.name,
   email: row.email,
   passwordHash: row.password_hash,
+  googleId: row.google_id || undefined,
   avatar: row.avatar,
   verified: row.verified === 1,
   createdAt: row.created_at,
@@ -40,9 +43,14 @@ export const findUserById = (id: string): User | undefined => {
   return row ? rowToUser(row) : undefined;
 };
 
-export const createUser = (user: { id: string; name: string; email: string; passwordHash: string; avatar: string }): User => {
+export const createUser = (user: { id: string; name: string; email: string; passwordHash: string; googleId?: string; avatar: string }): User => {
   db.prepare(
-    "INSERT INTO users (id, name, email, password_hash, avatar, verified) VALUES (?, ?, ?, ?, ?, 0)"
-  ).run(user.id, user.name, user.email, user.passwordHash, user.avatar);
+    "INSERT INTO users (id, name, email, password_hash, google_id, avatar, verified) VALUES (?, ?, ?, ?, ?, ?, 0)"
+  ).run(user.id, user.name, user.email, user.passwordHash, user.googleId || null, user.avatar);
   return findUserById(user.id)!;
+};
+
+export const findUserByGoogleId = (googleId: string): User | undefined => {
+  const row = db.prepare("SELECT * FROM users WHERE google_id = ?").get(googleId) as UserRow | undefined;
+  return row ? rowToUser(row) : undefined;
 };

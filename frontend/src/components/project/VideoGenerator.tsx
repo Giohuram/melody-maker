@@ -26,6 +26,7 @@ interface VideoStyle {
   showProgress: boolean;
   karaoke: boolean;
   textColor: string;
+  textAlign: "left" | "center";
 }
 
 interface VideoGeneratorProps {
@@ -48,9 +49,12 @@ const formatDimensions: Record<string, [number, number]> = {
 };
 
 const fontMapFn: Record<string, (h: number) => string> = {
-  montserrat: (h) => `bold ${Math.round(h * 0.05)}px Montserrat, sans-serif`,
+  montserrat: (h) => `900 ${Math.round(h * 0.05)}px Montserrat, sans-serif`,
   inter: (h) => `bold ${Math.round(h * 0.05)}px Inter, sans-serif`,
   mono: (h) => `bold ${Math.round(h * 0.042)}px 'JetBrains Mono', monospace`,
+  poppins: (h) => `bold ${Math.round(h * 0.048)}px Poppins, sans-serif`,
+  playfair: (h) => `italic bold ${Math.round(h * 0.052)}px 'Playfair Display', serif`,
+  bebas: (h) => `400 ${Math.round(h * 0.058)}px 'Bebas Neue', sans-serif`,
 };
 
 const textPositionY: Record<string, (h: number, isLandscape: boolean) => number> = {
@@ -179,18 +183,41 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
           ctx.globalAlpha = 1;
         }
       } else {
-        // Standard background
+        // Template-specific backgrounds
+        const template = style.template || "minimal";
         const bgGrad = ctx.createLinearGradient(0, 0, w, h);
-        bgGrad.addColorStop(0, "#0A0A0F");
-        bgGrad.addColorStop(1, "#1A0A2E");
+        
+        if (template === "neon") {
+          bgGrad.addColorStop(0, "#1a0025");
+          bgGrad.addColorStop(0.5, "#0d0015");
+          bgGrad.addColorStop(1, "#120020");
+        } else if (template === "cinematic") {
+          bgGrad.addColorStop(0, "#000000");
+          bgGrad.addColorStop(1, "#1a1030");
+        } else if (template === "hiphop") {
+          bgGrad.addColorStop(0, "#1a1a00");
+          bgGrad.addColorStop(0.5, "#0d0d00");
+          bgGrad.addColorStop(1, "#0a0a0a");
+        } else if (template === "lofi") {
+          bgGrad.addColorStop(0, "#1a1520");
+          bgGrad.addColorStop(1, "#0d0a10");
+        } else if (template === "karaoke") {
+          bgGrad.addColorStop(0, "#15001a");
+          bgGrad.addColorStop(0.5, "#0a0012");
+          bgGrad.addColorStop(1, "#001a15");
+        } else {
+          // minimal
+          bgGrad.addColorStop(0, "#0c0c14");
+          bgGrad.addColorStop(1, "#0A0A0F");
+        }
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, w, h);
 
         if (coverImg) {
           ctx.save();
-          ctx.globalAlpha = 0.25;
-          ctx.filter = "blur(20px)";
-          const scale = Math.max(w / coverImg.width, h / coverImg.height) * 1.1;
+          ctx.globalAlpha = 0.35;
+          ctx.filter = "blur(40px) saturate(1.4)";
+          const scale = Math.max(w / coverImg.width, h / coverImg.height) * 1.5;
           const dw = coverImg.width * scale;
           const dh = coverImg.height * scale;
           ctx.drawImage(coverImg, (w - dw) / 2, (h - dh) / 2, dw, dh);
@@ -200,9 +227,9 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
         }
 
         const overlay = ctx.createLinearGradient(0, 0, 0, h);
-        overlay.addColorStop(0, "rgba(10,10,15,0.6)");
-        overlay.addColorStop(0.5, "rgba(10,10,15,0.3)");
-        overlay.addColorStop(1, "rgba(10,10,15,0.8)");
+        overlay.addColorStop(0, "rgba(10,10,15,0.55)");
+        overlay.addColorStop(0.5, "rgba(10,10,15,0.4)");
+        overlay.addColorStop(1, "rgba(10,10,15,0.7)");
         ctx.fillStyle = overlay;
         ctx.fillRect(0, 0, w, h);
 
@@ -252,59 +279,103 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
       const activeLyric = activeLyricIdx >= 0 ? timings[activeLyricIdx] : null;
 
       if (isAppleMusic) {
-        const lineH = h * 0.06;
-        const visibleLines = 9;
-        const centerY = h * 0.5;
-        const startIdx = Math.max(0, activeLyricIdx - Math.floor(visibleLines / 2));
-        ctx.textAlign = "left";
+        // Match real Apple Music (Image 3): LARGE text, only 5-6 visible lines, proper spacing
+        const align = style.textAlign || "left";
+        const isLeftAlign = align === "left";
         const leftPad = w * 0.06;
-        const maxW = w * 0.88;
+        const rightPad = w * 0.08;
+        const maxW = w - leftPad - rightPad;
+        
+        // Much larger fonts like real Apple Music
+        const activeFontSize = Math.round(h * 0.055);  // Active line is BIG
+        const inactiveFontSize = Math.round(h * 0.042); // Inactive still readable
+        const lineSpacing = h * 0.095; // More spacing between lines
+
+        // Header height: cover at h*0.03 + coverSize(w*0.12) + gap
+        const headerBottom = h * 0.03 + w * 0.12 + h * 0.04;
+        const lyricsTopY = headerBottom;
+        
+        // Only show 5-6 lines max like real Apple Music
+        const visibleLines = 6;
+
+        // If no line is currently active, highlight next upcoming line
+        let effectiveActiveIdx = activeLyricIdx;
+        if (effectiveActiveIdx < 0 && timings.length > 0) {
+          const nextIdx = timings.findIndex((l) => t < l.startTime);
+          if (nextIdx >= 0) effectiveActiveIdx = nextIdx;
+        }
+
+        // Position active line at slot 1 (second from top) like real Apple Music
+        const activeSlot = 1;
+        const startIdx = Math.max(0, effectiveActiveIdx - activeSlot);
+
+        ctx.textAlign = isLeftAlign ? "left" : "center";
+        const textX = isLeftAlign ? leftPad : w / 2;
 
         for (let vi = 0; vi < visibleLines && startIdx + vi < timings.length; vi++) {
           const idx = startIdx + vi;
           const line = timings[idx];
-          const ly = centerY + (vi - Math.floor(visibleLines / 2)) * lineH;
-          const isActive = idx === activeLyricIdx;
-          const isPast = activeLyricIdx >= 0 ? idx < activeLyricIdx : line.endTime < t;
-          const distFromCenter = Math.abs(vi - Math.floor(visibleLines / 2)) / (visibleLines / 2);
-          ctx.globalAlpha = Math.max(0.1, 1 - distFromCenter * 0.85);
+          const isActive = idx === effectiveActiveIdx;
+          const isPast = effectiveActiveIdx >= 0 ? idx < effectiveActiveIdx : line.endTime < t;
+
+          const curY = lyricsTopY + vi * lineSpacing;
+
+          // Fade edges: top line fades, bottom lines fade more
+          let opacity = 1;
+          if (vi === 0 && startIdx > 0) opacity = 0.15; // Top line faded (previous)
+          else if (isActive) opacity = 1;
+          else if (isPast) opacity = 0.25;
+          else if (vi >= 4) opacity = 0.3 - (vi - 4) * 0.1; // Bottom lines fade out
+          else opacity = 0.45;
+
           ctx.shadowBlur = 0;
 
           if (isActive) {
-            ctx.font = `900 ${Math.round(lineH * 0.65)}px Montserrat, sans-serif`;
+            ctx.font = `900 ${activeFontSize}px Montserrat, sans-serif`;
             ctx.fillStyle = textColor;
             ctx.globalAlpha = 1;
-            ctx.fillText(line.text, leftPad, ly + lineH * 0.15, maxW);
+            ctx.fillText(line.text, textX, curY, maxW);
           } else {
-            ctx.font = `700 ${Math.round(lineH * 0.55)}px Montserrat, sans-serif`;
+            ctx.font = `700 ${inactiveFontSize}px Montserrat, sans-serif`;
             ctx.fillStyle = textColor;
-            ctx.globalAlpha = ctx.globalAlpha * (isPast ? 0.25 : 0.4);
-            ctx.fillText(line.text, leftPad, ly + lineH * 0.15, maxW);
+            ctx.globalAlpha = Math.max(0.1, opacity);
+            ctx.fillText(line.text, textX, curY, maxW);
           }
         }
         ctx.globalAlpha = 1;
         ctx.shadowBlur = 0;
       } else if (activeLyric) {
         const isLandscape = w > h;
-        const baseY = (textPositionY[style.textPosition] || textPositionY.center)(h, isLandscape);
+        const isSq = Math.abs(w - h) < 50;
+        const template = style.template || "minimal";
+        
+        // For landscape (YouTube), position lyrics below the title area on the right side
+        let baseY: number;
+        let lyricCenterX = w / 2;
+        let maxLyricWidth = w * 0.85;
+        
+        if (isLandscape) {
+          baseY = h * 0.65;
+          lyricCenterX = w * 0.65;
+          maxLyricWidth = w * 0.45;
+        } else {
+          baseY = (textPositionY[style.textPosition] || textPositionY.center)(h, isLandscape);
+        }
+        
         const progress = Math.min(1, (t - activeLyric.startTime) / 0.35);
         const exitProgress = Math.max(0, 1 - (activeLyric.endTime - t) / 0.25);
 
-        // Transition-specific animation offsets
         let offsetY = 0;
         let scale = 1;
         let alpha = progress;
 
         if (style.transition === "slide") {
-          // Slide up from below
           offsetY = (1 - progress) * h * 0.06;
-          // Slide out upward at end
           if (exitProgress > 0) {
             offsetY = -exitProgress * h * 0.04;
             alpha = 1 - exitProgress;
           }
         } else if (style.transition === "bounce") {
-          // Bounce-in: overshoot then settle
           if (progress < 1) {
             const p = progress;
             scale = p < 0.6 ? p / 0.6 * 1.15 : 1.15 - (p - 0.6) / 0.4 * 0.15;
@@ -312,13 +383,11 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
           } else {
             scale = 1;
           }
-          // Scale out at end
           if (exitProgress > 0) {
             scale = 1 + exitProgress * 0.12;
             alpha = 1 - exitProgress;
           }
         } else {
-          // Fade (default): simple opacity
           if (exitProgress > 0) {
             alpha = 1 - exitProgress;
           }
@@ -328,27 +397,50 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
 
         ctx.save();
         ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
-        ctx.shadowColor = "rgba(0,0,0,0.6)";
-        ctx.shadowBlur = 12;
-        ctx.fillStyle = textColor;
+        
+        // Template-specific text styling
+        if (template === "neon") {
+          ctx.shadowColor = "#FF006E";
+          ctx.shadowBlur = 25;
+          ctx.fillStyle = "#FF69B4";
+        } else if (template === "cinematic") {
+          ctx.shadowColor = "rgba(0,0,0,0.8)";
+          ctx.shadowBlur = 20;
+          ctx.fillStyle = textColor;
+        } else if (template === "hiphop") {
+          ctx.shadowColor = "#FFD700";
+          ctx.shadowBlur = 15;
+          ctx.fillStyle = "#FFFF00";
+        } else if (template === "lofi") {
+          ctx.shadowColor = "rgba(147,112,219,0.6)";
+          ctx.shadowBlur = 18;
+          ctx.fillStyle = "#DDA0DD";
+        } else if (template === "karaoke") {
+          ctx.shadowColor = "#00FF88";
+          ctx.shadowBlur = 20;
+          ctx.fillStyle = "#00FF88";
+        } else {
+          ctx.shadowColor = "rgba(0,0,0,0.6)";
+          ctx.shadowBlur = 12;
+          ctx.fillStyle = textColor;
+        }
+        
         ctx.font = (fontMapFn[style.fontStyle] || fontMapFn.montserrat)(h);
         ctx.textAlign = "center";
 
-        // Apply scale transform via translate
         if (scale !== 1) {
-          ctx.translate(w / 2, lyricY);
+          ctx.translate(lyricCenterX, lyricY);
           ctx.scale(scale, scale);
-          ctx.translate(-w / 2, -lyricY);
+          ctx.translate(-lyricCenterX, -lyricY);
         }
 
         // Word-wrap
-        const maxWidth = w * 0.85;
         const words = activeLyric.text.split(" ");
         let line = "";
         const lines: string[] = [];
         for (const word of words) {
           const test = line + word + " ";
-          if (ctx.measureText(test).width > maxWidth && line !== "") {
+          if (ctx.measureText(test).width > maxLyricWidth && line !== "") {
             lines.push(line.trim());
             line = word + " ";
           } else {
@@ -357,7 +449,7 @@ const VideoGenerator = ({ audioUrl, coverUrl, timings, audioDuration, title, art
         }
         lines.push(line.trim());
         lines.forEach((l, i) => {
-          ctx.fillText(l, w / 2, lyricY + i * (h * 0.07));
+          ctx.fillText(l, lyricCenterX, lyricY + i * (h * 0.08));
         });
         ctx.restore();
       }

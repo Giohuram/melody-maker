@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Zap, Play, ArrowRight, Radio } from "lucide-react";
+import { Zap, Play, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
@@ -92,7 +92,7 @@ const Hero = () => {
               className="w-full sm:w-auto bg-gradient-primary text-primary-foreground border-0 animate-pulse-glow hover:opacity-90 transition-all font-semibold text-base px-6 sm:px-8 py-5 sm:py-6 gap-2 rounded-xl"
             >
               <Zap className="w-5 h-5" />
-              Créer ma Vidéo Gratuitement
+              Créer ma Vidéo
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
@@ -107,17 +107,6 @@ const Hero = () => {
                 Voir comment
               </Button>
             </a>
-            <Link to="/feed" className="flex-1 sm:flex-none">
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full border-primary/40 text-primary hover:bg-primary/10 font-semibold text-base px-4 sm:px-6 py-5 sm:py-6 gap-2 rounded-xl"
-              >
-                <Radio className="w-5 h-5" />
-                <span className="hidden sm:inline">Fil d'actualité</span>
-                <span className="sm:hidden">Fil</span>
-              </Button>
-            </Link>
           </div>
         </motion.div>
 
@@ -132,7 +121,7 @@ const Hero = () => {
             { value: "50K+", label: "Vidéos Créées" },
             { value: "12K+", label: "Artistes" },
             { value: "5", label: "Formats d'Export" },
-            { value: "Gratuit", label: "Pour Commencer" },
+            { value: "$2.99", label: "Par Vidéo" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="font-heading text-2xl sm:text-3xl font-black gradient-text">{stat.value}</div>

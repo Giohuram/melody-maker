@@ -4,7 +4,6 @@ import { config } from "./config/env.js";
 import "./config/database.js";
 import authRoutes from "./routes/auth.js";
 import projectRoutes from "./routes/projects.js";
-import feedRoutes from "./routes/feed.js";
 
 const app = express();
 
@@ -24,7 +23,6 @@ app.get("/api/health", (_req, res) => {
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
-app.use("/api/feed", feedRoutes);
 
 // 404 handler
 app.use((_req, res) => {

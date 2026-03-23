@@ -18,6 +18,7 @@ interface VideoStyle {
   showProgress: boolean;
   karaoke: boolean;
   textColor: string;
+  textAlign: "left" | "center";
 }
 
 interface VideoPreviewProps {
@@ -118,20 +119,28 @@ const AppleMusicLyrics = ({
   currentTime,
   font,
   textColor,
+  textAlign,
 }: {
   timings: LyricTiming[];
   currentTime: number;
   font: string;
   textColor: string;
+  textAlign: "left" | "center";
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef<HTMLDivElement>(null);
 
-  const activeIdx = timings.findIndex(
+  let activeIdx = timings.findIndex(
     (t) => currentTime >= t.startTime && currentTime <= t.endTime
   );
 
-  // Smooth scroll active line to center
+  // If no line is active yet, highlight the next upcoming line
+  if (activeIdx < 0 && timings.length > 0) {
+    const nextIdx = timings.findIndex((t) => currentTime < t.startTime);
+    if (nextIdx >= 0) activeIdx = nextIdx;
+  }
+
+  // Smooth scroll active line into view — position near top like real Apple Music
   useEffect(() => {
     if (activeRef.current && containerRef.current) {
       const container = containerRef.current;
@@ -139,41 +148,60 @@ const AppleMusicLyrics = ({
       const containerH = container.clientHeight;
       const elTop = el.offsetTop;
       const elH = el.clientHeight;
-      const targetScroll = elTop - containerH / 2 + elH / 2;
+      const targetScroll = elTop - containerH * 0.25 + elH / 2;
       container.scrollTo({ top: targetScroll, behavior: "smooth" });
     }
   }, [activeIdx]);
 
+  const isLeft = textAlign === "left";
+
+  // Only show 6 lines max like real Apple Music
+  const visibleLines = 6;
+  const activeSlot = 1; // Active line at position 1 (second from top)
+  const startIdx = Math.max(0, activeIdx - activeSlot);
+  const visibleTimings = timings.slice(startIdx, startIdx + visibleLines);
+
   return (
     <div
       ref={containerRef}
-      className="absolute inset-0 overflow-hidden flex flex-col px-5"
+      className="absolute inset-0 overflow-hidden"
       style={{
-        top: "60px",
-        maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 80%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 80%, transparent 100%)",
+        top: "48px",
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 5%, black 85%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 5%, black 85%, transparent 100%)",
       }}
     >
-      <div className="py-[35%]">
-        {timings.map((t, i) => {
-          const isActive = i === activeIdx;
-          const isPast = activeIdx >= 0 ? i < activeIdx : t.endTime < currentTime;
+      <div style={{ paddingTop: "8%", paddingBottom: "20%", paddingLeft: isLeft ? "6%" : "5%", paddingRight: isLeft ? "8%" : "5%" }}>
+        {visibleTimings.map((t, vi) => {
+          const idx = startIdx + vi;
+          const isActive = idx === activeIdx;
+          const isPast = activeIdx >= 0 ? idx < activeIdx : t.endTime < currentTime;
+
+          // Fade logic like real Apple Music
+          let opacity = 1;
+          if (vi === 0 && startIdx > 0) opacity = 0.15;
+          else if (isActive) opacity = 1;
+          else if (isPast) opacity = 0.25;
+          else if (vi >= 4) opacity = 0.3 - (vi - 4) * 0.1;
+          else opacity = 0.45;
 
           return (
             <div
-              key={i}
+              key={idx}
               ref={isActive ? activeRef : undefined}
-              className="py-2 transition-all duration-500 ease-out"
+              className="transition-all duration-500 ease-out"
               style={{
-                transformOrigin: "left center",
+                marginBottom: isActive ? "0.8em" : "0.65em",
+                textAlign: isLeft ? "left" : "center",
               }}
             >
               <p
-                className={`${font} leading-snug transition-all duration-500`}
+                className={`${font} transition-all duration-500`}
                 style={{
-                  fontSize: isActive ? "1.25rem" : "1rem",
+                  fontSize: isActive ? "1.35rem" : "1.05rem",
+                  lineHeight: 1.25,
                   color: textColor,
-                  opacity: isActive ? 1 : isPast ? 0.25 : 0.4,
+                  opacity: Math.max(0.1, opacity),
                   fontWeight: isActive ? 900 : 700,
                 }}
               >
@@ -273,11 +301,12 @@ const VideoPreview = ({ timings, audioUrl, coverUrl, audioDuration, title, artis
                 <img
                   src={coverUrl}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover blur-sm scale-110 opacity-30"
+                  className="absolute inset-0 w-full h-full object-cover scale-150"
+                  style={{ opacity: 0.35, filter: "blur(30px) saturate(1.4)" }}
                 />
                 <div
                   className="absolute inset-0"
-                  style={{ background: "hsl(var(--background) / 0.6)" }}
+                  style={{ background: "linear-gradient(to bottom, rgba(10,10,15,0.55), rgba(10,10,15,0.75))" }}
                 />
               </>
             )}
@@ -337,6 +366,7 @@ const VideoPreview = ({ timings, audioUrl, coverUrl, audioDuration, title, artis
                 currentTime={currentTime}
                 font={font}
                 textColor={textColor}
+                textAlign={style.textAlign || "left"}
               />
             ) : (
               <div className={`absolute inset-0 flex flex-col items-center px-6 ${pos}`}>

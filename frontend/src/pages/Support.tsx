@@ -259,9 +259,7 @@ const Support = () => {
             <span>·</span>
             <Link to="/privacy" className="hover:text-foreground transition-colors">Politique de confidentialité</Link>
             <span>·</span>
-            <Link to="/feed" className="hover:text-foreground transition-colors">Fil d'actualité</Link>
-            <span>·</span>
-            <Link to="/create" className="hover:text-primary transition-colors font-semibold">Créer une vidéo</Link>
+                        <Link to="/create" className="hover:text-primary transition-colors font-semibold">Créer une vidéo</Link>
           </div>
         </motion.div>
       </main>

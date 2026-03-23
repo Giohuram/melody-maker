@@ -1,15 +1,24 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Menu, X, Zap, Radio, BookOpen } from "lucide-react";
+import { Menu, X, Zap, BookOpen, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 import logoImg from "@/assets/lyricwave-logo.png";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const isLanding = location.pathname === "/";
   const isAuth = location.pathname === "/auth";
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   const navLinks = isLanding
     ? [
@@ -57,13 +66,6 @@ const Navbar = () => {
                 Mes Projets
               </Link>
               <Link
-                to="/feed"
-                className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium flex items-center gap-1"
-              >
-                <Radio className="w-3.5 h-3.5" />
-                Fil d'actualité
-              </Link>
-              <Link
                 to="/docs/backend"
                 className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium flex items-center gap-1"
               >
@@ -76,14 +78,40 @@ const Navbar = () => {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-3">
-          {isLanding ? (
+          {user ? (
             <>
-              <Link to="/feed">
-                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground gap-1.5">
-                  <Radio className="w-4 h-4" />
-                  Fil
+              <Link to="/create">
+                <Button size="sm" className="bg-gradient-primary text-primary-foreground border-0 glow-primary hover:opacity-90 transition-opacity font-semibold gap-2">
+                  <Zap className="w-4 h-4" />
+                  Nouveau Projet
                 </Button>
               </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="gap-2">
+                    <div className="w-7 h-7 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
+                      {user.avatar || user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="hidden lg:inline text-sm">{user.name}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard" className="flex items-center gap-2">
+                      <User className="w-4 h-4" />
+                      Mes Projets
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Déconnexion
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : isLanding ? (
+            <>
               <Link to="/auth">
                 <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
                   Connexion
@@ -97,10 +125,10 @@ const Navbar = () => {
               </Link>
             </>
           ) : (
-            <Link to="/create">
+            <Link to="/auth">
               <Button size="sm" className="bg-gradient-primary text-primary-foreground border-0 glow-primary hover:opacity-90 transition-opacity font-semibold gap-2">
                 <Zap className="w-4 h-4" />
-                Nouveau Projet
+                Connexion
               </Button>
             </Link>
           )}
@@ -137,35 +165,46 @@ const Navbar = () => {
               <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="text-muted-foreground hover:text-foreground text-sm font-medium py-2">
                 Mes Projets
               </Link>
-              <Link to="/feed" onClick={() => setMobileOpen(false)} className="text-muted-foreground hover:text-foreground text-sm font-medium py-2 flex items-center gap-2">
-                <Radio className="w-4 h-4" />
-                Fil d'actualité
-              </Link>
               <Link to="/docs/backend" onClick={() => setMobileOpen(false)} className="text-muted-foreground hover:text-foreground text-sm font-medium py-2 flex items-center gap-2">
                 <BookOpen className="w-4 h-4" />
                 Docs API
               </Link>
             </>
           )}
-          {isLanding && (
-            <Link to="/feed" onClick={() => setMobileOpen(false)}>
-              <Button variant="outline" className="w-full border-border/60 gap-2">
-                <Radio className="w-4 h-4" />
-                Fil d'actualité
+          {user ? (
+            <>
+              <div className="flex items-center gap-2 py-2 px-1 text-sm">
+                <div className="w-7 h-7 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground text-xs font-bold">
+                  {user.avatar || user.name.charAt(0).toUpperCase()}
+                </div>
+                <span>{user.name}</span>
+              </div>
+              <Link to="/create" onClick={() => setMobileOpen(false)}>
+                <Button className="w-full bg-gradient-primary text-primary-foreground border-0 font-semibold gap-2">
+                  <Zap className="w-4 h-4" />
+                  Nouveau Projet
+                </Button>
+              </Link>
+              <Button variant="outline" onClick={() => { handleLogout(); setMobileOpen(false); }} className="w-full border-border/60 text-destructive">
+                <LogOut className="w-4 h-4 mr-2" />
+                Déconnexion
               </Button>
-            </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/auth" onClick={() => setMobileOpen(false)}>
+                <Button variant="outline" className="w-full border-border/60">
+                  Connexion / Inscription
+                </Button>
+              </Link>
+              <Link to="/create" onClick={() => setMobileOpen(false)}>
+                <Button className="w-full bg-gradient-primary text-primary-foreground border-0 font-semibold gap-2">
+                  <Zap className="w-4 h-4" />
+                  Créer une Vidéo
+                </Button>
+              </Link>
+            </>
           )}
-          <Link to="/auth" onClick={() => setMobileOpen(false)}>
-            <Button variant="outline" className="w-full border-border/60">
-              Connexion / Inscription
-            </Button>
-          </Link>
-          <Link to="/create" onClick={() => setMobileOpen(false)}>
-            <Button className="w-full bg-gradient-primary text-primary-foreground border-0 font-semibold gap-2">
-              <Zap className="w-4 h-4" />
-              Commencer Gratuitement
-            </Button>
-          </Link>
         </motion.div>
       )}
     </motion.nav>

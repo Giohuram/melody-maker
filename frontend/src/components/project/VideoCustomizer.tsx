@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Smartphone, Monitor, Square, Tv, Sparkles, Type, Music, Palette } from "lucide-react";
+import { Smartphone, Monitor, Square, Tv, Sparkles, Type, Music, Palette, AlignLeft, AlignCenter } from "lucide-react";
 
 export type VideoFormat = "tiktok" | "youtube-full" | "instagram" | "shorts";
 
@@ -12,6 +12,7 @@ export interface VideoStyle {
   showProgress: boolean;
   karaoke: boolean;
   textColor: string;
+  textAlign: "left" | "center";
 }
 
 interface VideoCustomizerProps {
@@ -83,6 +84,9 @@ const fontStyles = [
   { id: "montserrat", label: "Montserrat", className: "font-heading font-black", sample: "FEEL THE BEAT" },
   { id: "inter", label: "Inter", className: "font-body font-bold", sample: "Feel the beat" },
   { id: "mono", label: "JetBrains Mono", className: "font-mono font-bold", sample: "feel_the_beat" },
+  { id: "poppins", label: "Poppins", className: "font-sans font-bold", sample: "Feel The Beat" },
+  { id: "playfair", label: "Playfair", className: "font-serif font-bold italic", sample: "Feel the Beat" },
+  { id: "bebas", label: "Bebas Neue", className: "font-heading font-black tracking-wider", sample: "FEEL THE BEAT" },
 ];
 
 const textPositionLabels: Record<string, string> = {
@@ -300,6 +304,40 @@ const VideoCustomizer = ({ style, onChange }: VideoCustomizerProps) => {
             ♫ Style Apple Music — Les paroles défilent avec la ligne active surlignée et mise en avant progressivement.
           </motion.p>
         )}
+      </div>
+
+      {/* Text Alignment */}
+      <div>
+        <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3 flex items-center gap-2">
+          <AlignLeft className="w-3.5 h-3.5" />
+          Alignement du Texte
+        </label>
+        <div className="flex gap-2">
+          {([
+            { id: "left" as const, label: "Gauche", icon: AlignLeft, desc: "Style Apple Music" },
+            { id: "center" as const, label: "Centre", icon: AlignCenter, desc: "Centré classique" },
+          ]).map((a) => {
+            const Icon = a.icon;
+            const isSelected = style.textAlign === a.id;
+            return (
+              <button
+                key={a.id}
+                onClick={() => update({ textAlign: a.id })}
+                className={`flex-1 flex items-center gap-2.5 p-3 rounded-xl border transition-all ${
+                  isSelected
+                    ? "border-primary/60 bg-primary/10 text-primary"
+                    : "border-border/40 hover:border-border/80 text-muted-foreground"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <div className="text-left">
+                  <p className="text-xs font-bold">{a.label}</p>
+                  <p className="text-xs opacity-60">{a.desc}</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Text Color */}

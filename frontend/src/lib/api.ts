@@ -46,11 +46,17 @@ export const api = {
         method: "POST",
         body: JSON.stringify({ email, password }),
       }),
+    googleLogin: (googleToken: string) =>
+      request<AuthResponse & { isNewUser: boolean }>("/auth/google", {
+        method: "POST",
+        body: JSON.stringify({ token: googleToken }),
+      }),
     me: () => request<{ user: AuthResponse["user"] }>("/auth/me"),
   },
 
   // ─── Projects ───────────────────────────────────────
   projects: {
+    getAll: () => request<any[]>("/projects").then((res: any) => res.projects || res || []),
     list: () => request<{ projects: any[] }>("/projects"),
     get: (id: string) => request<{ project: any }>(`/projects/${id}`),
     create: (data: { title: string; artist: string; format?: string; duration?: string; lyrics?: string[]; style?: any }) =>
@@ -69,20 +75,7 @@ export const api = {
       request<{ stats: { totalProjects: number; completedVideos: number; creditsRemaining: number; thisMonth: number } }>("/projects/stats"),
   },
 
-  // ─── Feed ──────────────────────────────────────────
-  feed: {
-    list: () => request<{ posts: any[] }>("/feed"),
-    get: (id: string) => request<{ post: any }>(`/feed/${id}`),
-    like: (id: string) => request<{ likes: number }>(`/feed/${id}/like`, { method: "POST" }),
-    unlike: (id: string) => request<{ likes: number }>(`/feed/${id}/unlike`, { method: "POST" }),
-    comment: (id: string, text: string, userName: string) =>
-      request<{ comment: any }>(`/feed/${id}/comments`, {
-        method: "POST",
-        body: JSON.stringify({ text, userName }),
-      }),
-    share: (id: string) => request<{ shares: number }>(`/feed/${id}/share`, { method: "POST" }),
-  },
-
+  
   // ─── Health ─────────────────────────────────────────
   health: () => request<{ status: string; timestamp: string }>("/health"),
 };

@@ -2,11 +2,18 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+import { OAuth2Client } from "google-auth-library";
 import { config } from "../config/env.js";
-import { findUserByEmail, findUserById, createUser } from "../models/User.js";
+import { findUserByEmail, findUserById, findUserByGoogleId, createUser } from "../models/User.js";
 
 const generateToken = (userId: string): string =>
   jwt.sign({ userId }, config.jwtSecret, { expiresIn: "7d" });
+
+const googleClient = new OAuth2Client(
+  config.googleClientId,
+  config.googleClientSecret,
+  "postmessage"
+);
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -71,6 +78,66 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const googleAuth = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { token: googleToken } = req.body;
+
+    if (!googleToken) {
+      res.status(400).json({ error: "Google token is required" });
+      return;
+    }
+
+    // Verify Google token
+    const ticket = await googleClient.verifyIdToken({
+      idToken: googleToken,
+      audience: config.googleClientId,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email || !payload.sub) {
+      res.status(400).json({ error: "Invalid Google token payload" });
+      return;
+    }
+
+    const { email, name, sub: googleId, picture } = payload;
+
+    // Check if user exists by Google ID
+    let user = findUserByGoogleId(googleId);
+
+    if (!user) {
+      // Check if user exists by email (might have signed up with email/password)
+      user = findUserByEmail(email);
+      
+      if (!user) {
+        // New user - create account
+        const passwordHash = await bcrypt.hash(uuidv4(), 10); // Random password for Google users
+        user = createUser({
+          id: uuidv4(),
+          name: name || email.split("@")[0],
+          email,
+          passwordHash,
+          googleId,
+          avatar: name?.charAt(0).toUpperCase() || email.charAt(0).toUpperCase(),
+        });
+      } else {
+        // Existing user - link Google account
+        // In a real app, you might want to update the user record with googleId
+        // For now, we'll just proceed with the existing account
+      }
+    }
+
+    const token = generateToken(user.id);
+    res.json({
+      token,
+      user: { id: user.id, name: user.name, email: user.email, avatar: user.avatar, verified: user.verified },
+      isNewUser: !findUserByGoogleId(googleId) && !findUserByEmail(email),
+    });
+  } catch (error) {
+    console.error("Google auth error:", error);
+    res.status(500).json({ error: "Google authentication failed" });
   }
 };
 

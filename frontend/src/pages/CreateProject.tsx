@@ -27,7 +27,7 @@ const CreateProject = () => {
   const [syncMethod, setSyncMethod] = useState<"auto" | "manual">("auto");
   const [style, setStyle] = useState<VideoStyle>({
     format: "tiktok", template: "neon", fontStyle: "montserrat",
-    textPosition: "center", transition: "fade", showProgress: false, karaoke: false, textColor: "#FFFFFF",
+    textPosition: "center", transition: "fade", showProgress: false, karaoke: false, textColor: "#FFFFFF", textAlign: "left",
   });
 
   const canNext = () => {

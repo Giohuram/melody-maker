@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Zap, ArrowRight, Twitter, Instagram, Github, Radio } from "lucide-react";
+import { Zap, ArrowRight, Twitter, Instagram, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoImg from "@/assets/lyricwave-logo.png";
 
@@ -28,7 +28,7 @@ const CTA = () => {
             </h2>
             <p className="text-muted-foreground text-base sm:text-lg mb-8 sm:mb-10 leading-relaxed px-2">
               Rejoignez des milliers d'artistes qui créent déjà des vidéos lyrics époustouflantes.
-              Aucune carte bancaire requise. 3 vidéos gratuites, pour toujours.
+              Créez des vidéos lyrics professionnelles en quelques minutes.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <Link to="/create">
@@ -39,16 +39,6 @@ const CTA = () => {
                   <Zap className="w-5 h-5" />
                   Créer ma Première Vidéo
                   <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
-              <Link to="/feed">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto border-primary/40 text-primary hover:bg-primary/10 font-semibold text-base sm:text-lg px-6 sm:px-8 py-6 sm:py-7 gap-2 rounded-xl"
-                >
-                  <Radio className="w-5 h-5" />
-                  Explorer le Fil
                 </Button>
               </Link>
             </div>
@@ -68,10 +58,6 @@ const CTA = () => {
               <Link to="/privacy" className="hover:text-foreground transition-colors">Confidentialité</Link>
               <Link to="/terms" className="hover:text-foreground transition-colors">Conditions</Link>
               <Link to="/support" className="hover:text-foreground transition-colors">Support</Link>
-              <Link to="/feed" className="hover:text-foreground transition-colors flex items-center gap-1">
-                <Radio className="w-3.5 h-3.5" />
-                Fil d'actualité
-              </Link>
             </div>
             <div className="flex items-center gap-3 sm:gap-4">
               <a href="#" className="w-9 h-9 glass rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors border border-border/40">
