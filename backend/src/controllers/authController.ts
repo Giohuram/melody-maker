@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import { OAuth2Client } from "google-auth-library";
 import { config } from "../config/env.js";
-import { findUserByEmail, findUserById, findUserByGoogleId, createUser } from "../models/User.js";
+import { findUserByEmail, findUserById, findUserByGoogleId, createUser } from "../models/UserPostgres.js";
 
 const generateToken = (userId: string): string =>
   jwt.sign({ userId }, config.jwtSecret, { expiresIn: "7d" });
@@ -24,13 +24,14 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    if (findUserByEmail(email)) {
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
       res.status(409).json({ error: "Email already registered" });
       return;
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = createUser({
+    const user = await createUser({
       id: uuidv4(),
       name,
       email,
@@ -58,7 +59,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const user = findUserByEmail(email);
+    const user = await findUserByEmail(email);
     if (!user) {
       res.status(401).json({ error: "Invalid email or password" });
       return;
@@ -105,16 +106,16 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
     const { email, name, sub: googleId, picture } = payload;
 
     // Check if user exists by Google ID
-    let user = findUserByGoogleId(googleId);
+    let user = await findUserByGoogleId(googleId);
 
     if (!user) {
       // Check if user exists by email (might have signed up with email/password)
-      user = findUserByEmail(email);
+      user = await findUserByEmail(email);
       
       if (!user) {
         // New user - create account
         const passwordHash = await bcrypt.hash(uuidv4(), 10); // Random password for Google users
-        user = createUser({
+        user = await createUser({
           id: uuidv4(),
           name: name || email.split("@")[0],
           email,
@@ -133,7 +134,7 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
     res.json({
       token,
       user: { id: user.id, name: user.name, email: user.email, avatar: user.avatar, verified: user.verified },
-      isNewUser: !findUserByGoogleId(googleId) && !findUserByEmail(email),
+      isNewUser: !(await findUserByGoogleId(googleId)) && !(await findUserByEmail(email)),
     });
   } catch (error) {
     console.error("Google auth error:", error);
@@ -141,9 +142,9 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-export const getMe = (req: Request & { userId?: string }, res: Response): void => {
+export const getMe = async (req: Request & { userId?: string }, res: Response): Promise<void> => {
   const { userId } = req as any;
-  const user = findUserById(userId);
+  const user = await findUserById(userId);
   if (!user) {
     res.status(404).json({ error: "User not found" });
     return;
